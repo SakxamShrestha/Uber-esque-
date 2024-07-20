@@ -9,20 +9,19 @@ import com.uber.uberapi.services.ETAService;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ETABasedFilter extends DriverFilter {
+public class VIPFilter extends DriverFilter {
     private final ETAService etaService;
 
-    public ETABasedFilter(ETAService etaService, Constants constants) {
+    public VIPFilter(ETAService etaService, Constants constants) {
         super(constants);
         this.etaService = etaService;
     }
 
     public List<Driver> apply(List<Driver> drivers, Booking booking) {
         if (!getConstants().getIsETABasedFilterEnabled()) return drivers;
-
-        ExactLocation pickup = booking.getPickupLocation();
-        return drivers.stream().filter(driver -> {
-            return etaService.getETAMinutes(driver.getLastKnownLocation(), pickup) <= getConstants().getMaxDriverETAMinutes();
-        }).collect(Collectors.toList());
+        // if the booking is for a prime or Sedan, then only match drivers > 4 rating
+        // todo
+        // for each driver, find the avg rating
+        return drivers;
     }
 }
